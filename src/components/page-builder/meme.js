@@ -41,13 +41,13 @@ const Meme = ({ fields }) => {
       <div
         style={{
           gridArea: "top",
-          alignItems: "start",
+          alignItems: "flex-start",
           ...textStyle,
         }}
       >
         {fields.topLine}
       </div>
-      <div style={{ gridArea: "bottom", alignItems: "end", ...textStyle }}>
+      <div style={{ gridArea: "bottom", alignItems: "flex-end", ...textStyle }}>
         {fields.bottomLine}
       </div>
       {/* <img
