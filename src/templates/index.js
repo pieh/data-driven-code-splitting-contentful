@@ -3,10 +3,9 @@ import { graphql } from "gatsby"
 import renderer from "../components/renderer"
 
 const IndexPage = ({ data }) => {
-  console.log(data)
   return (
     <>
-      Hello world!
+      <h1>{data.contentfulPageBuilder.title}</h1>
       {renderer(data.contentfulPageBuilder.richText.jsonButWithComponents)}
     </>
   )
