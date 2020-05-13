@@ -1,3 +1,5 @@
+require(`dotenv`).config()
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,
@@ -35,6 +37,7 @@ module.exports = {
         host: process.env.CONTENTFUL_HOST,
       },
     },
+    `gatsby-plugin-perf-budgets`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
