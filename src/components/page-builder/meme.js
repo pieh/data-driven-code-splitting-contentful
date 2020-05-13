@@ -1,4 +1,6 @@
 import React from "react"
+import { graphql } from "gatsby"
+import Image from "gatsby-image"
 
 const textStyle = {
   display: "flex",
@@ -12,7 +14,10 @@ const textStyle = {
   "-webkit-text-stroke-color": "black",
 }
 
-const Meme = ({ fields }) => {
+const Meme = ({ fields, referenceFields }) => {
+  const topLine = fields?.topLine ?? referenceFields?.topLine
+  const bottomLine = fields?.bottomLine ?? referenceFields?.bottomLine
+
   return (
     <div
       style={{
@@ -21,24 +26,37 @@ const Meme = ({ fields }) => {
         display: "grid",
         gridTemplateRows: "[start] 1fr 1fr [end]",
         gridTemplateColumns: "auto",
-        // gridTemplateRows: "1fr 1fr",
-        // columnGap: "15px",
         gridTemplateAreas: `
          "top"
          "bottom"
         `,
       }}
     >
-      <img
-        src={fields.memeImage.fields.file.url}
-        style={{
-          width: "100%",
-          height: "100%",
-          gridColumn: 1,
-          gridRow: "start / end",
-        }}
-        alt={fields.memeImage.fields.description}
-      />
+      {fields?.memeImage?.fields?.file?.url && (
+        <img
+          src={fields.memeImage.fields.file.url}
+          style={{
+            width: "100%",
+            height: "100%",
+            gridColumn: 1,
+            gridRow: "start / end",
+          }}
+          alt={fields.memeImage.fields.description}
+        />
+      )}
+      {referenceFields?.memeImage?.fixed && (
+        <Image
+          style={{
+            width: "100%",
+            height: "100%",
+            gridColumn: 1,
+            gridRow: "start / end",
+            zIndex: -1,
+          }}
+          fixed={referenceFields.memeImage.fixed}
+          alt={referenceFields.memeImage.description}
+        />
+      )}
       <div
         style={{
           gridArea: "top",
@@ -46,10 +64,10 @@ const Meme = ({ fields }) => {
           ...textStyle,
         }}
       >
-        {fields.topLine}
+        {topLine}
       </div>
       <div style={{ gridArea: "bottom", alignItems: "flex-end", ...textStyle }}>
-        {fields.bottomLine}
+        {bottomLine}
       </div>
       {/* <img
         src={fields.image.fields.file.url}
@@ -64,3 +82,16 @@ const Meme = ({ fields }) => {
 }
 
 export default Meme
+
+export const fragment = graphql`
+  fragment MemeFragment on ContentfulMeme {
+    topLine
+    bottomLine
+    memeImage {
+      description
+      fixed(width: 500, height: 500) {
+        ...GatsbyContentfulFixed
+      }
+    }
+  }
+`

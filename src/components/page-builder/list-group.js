@@ -1,9 +1,12 @@
 import React from "react"
+import { graphql } from "gatsby"
 
-const ListGroup = ({ fields }) => {
+const ListGroup = ({ fields, referenceFields }) => {
+  const items = fields?.items ?? referenceFields?.items
+
   return (
     <ul>
-      {(fields?.items || []).map(item => (
+      {(items || []).map(item => (
         <li>{item}</li>
       ))}
     </ul>
@@ -11,3 +14,9 @@ const ListGroup = ({ fields }) => {
 }
 
 export default ListGroup
+
+export const fragment = graphql`
+  fragment ListGroupFragment on ContentfulListGroup {
+    items
+  }
+`

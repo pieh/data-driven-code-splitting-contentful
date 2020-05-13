@@ -12,6 +12,12 @@ const Layout = ({ children }) => {
           slug
         }
       }
+      allContentfulReferencePageBuilder {
+        nodes {
+          title
+          slug
+        }
+      }
     }
   `)
 
@@ -35,16 +41,39 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <footer>
-        <h4>Links:</h4>
-        <nav>
-          <h5>Pages using rich text</h5>
+      <footer
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gridTemplateRows: "auto",
+          gridTemplateAreas: `
+            "header header"
+            "richtext reference" 
+            `,
+        }}
+      >
+        <h4 style={{ gridArea: "header", marginBottom: 0 }}>Links:</h4>
+        <nav style={{ gridArea: "richtext" }}>
+          <h5>Pages using rich text:</h5>
           <ul>
             {data.allContentfulPageBuilder.nodes.map(({ title, slug }) => (
               <li>
                 <Link to={`/${slug}`}>{title}</Link> (<code>{`/${slug}`}</code>)
               </li>
             ))}
+          </ul>
+        </nav>
+        <nav style={{ gridArea: "reference" }}>
+          <h5>Pages using references:</h5>
+          <ul>
+            {data.allContentfulReferencePageBuilder.nodes.map(
+              ({ title, slug }) => (
+                <li>
+                  <Link to={`/${slug}`}>{title}</Link> (
+                  <code>{`/${slug}`}</code>)
+                </li>
+              )
+            )}
           </ul>
         </nav>
       </footer>

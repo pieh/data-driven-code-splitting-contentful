@@ -6,13 +6,27 @@ exports.createPages = async ({ actions, graphql }) => {
           slug
         }
       }
+      allContentfulReferencePageBuilder {
+        nodes {
+          title
+          slug
+        }
+      }
     }
   `)
 
   data.allContentfulPageBuilder.nodes.forEach(({ slug }) => {
     actions.createPage({
       path: `/${slug}`,
-      component: require.resolve(`./src/templates/index.js`),
+      component: require.resolve(`./src/templates/rich-text.js`),
+      context: { slug },
+    })
+  })
+
+  data.allContentfulReferencePageBuilder.nodes.forEach(({ slug }) => {
+    actions.createPage({
+      path: `/${slug}`,
+      component: require.resolve(`./src/templates/reference.js`),
       context: { slug },
     })
   })
@@ -65,8 +79,12 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
   ])
 }
 
+// copied from contentful plugin
+const typePrefix = `Contentful`
+const makeTypeName = type => _.upperFirst(_.camelCase(`${typePrefix} ${type}`))
+
 exports.createResolvers = ({ createResolvers }) => {
-  createResolvers({
+  let resolvers = {
     contentfulPageBuilderRichTextRichTextNode: {
       jsonButWithComponents: {
         type: `JSON`,
@@ -98,5 +116,31 @@ exports.createResolvers = ({ createResolvers }) => {
         },
       },
     },
-  })
+  }
+
+  resolvers = Object.entries(pageBuilderMapping).reduce(
+    (acc, [type, componentPath]) => {
+      if (type === `_`) {
+        // skip fallback used for rich context
+        return acc
+      }
+
+      const GraphQLTypeName = makeTypeName(type)
+      acc[GraphQLTypeName] = {
+        moduleID: {
+          type: `String!`,
+          resolve(_, _2, context) {
+            return context.addModuleDependency({
+              source: componentPath,
+            })
+          },
+        },
+      }
+
+      return acc
+    },
+    resolvers
+  )
+
+  createResolvers(resolvers)
 }
