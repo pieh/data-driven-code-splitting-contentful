@@ -17,6 +17,7 @@ const MediaObject = ({ fields }) => {
       <img
         src={fields.image.fields.file.url}
         style={{ display: "block", width: 40, gridArea: "image" }}
+        alt={fields.image.fields.description}
       />
       <h3 style={{ margin: "0 0 10px", gridArea: "header" }}>
         {fields.heading}

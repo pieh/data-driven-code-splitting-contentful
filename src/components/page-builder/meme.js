@@ -37,6 +37,7 @@ const Meme = ({ fields }) => {
           gridColumn: 1,
           gridRow: "start / end",
         }}
+        alt={fields.memeImage.fields.description}
       />
       <div
         style={{
