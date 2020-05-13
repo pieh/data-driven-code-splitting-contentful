@@ -1,13 +1,14 @@
 import React from "react"
 import { graphql } from "gatsby"
 import renderer from "../components/renderer"
+import Layout from "../components/layout"
 
 const IndexPage = ({ data }) => {
   return (
-    <>
-      <h1>{data.contentfulPageBuilder.title}</h1>
+    <Layout>
+      <h2>{data.contentfulPageBuilder.title}</h2>
       {renderer(data.contentfulPageBuilder.richText.jsonButWithComponents)}
-    </>
+    </Layout>
   )
 }
 
