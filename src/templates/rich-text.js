@@ -3,7 +3,6 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, INLINES } from "@contentful/rich-text-types"
 
 import { graphql, getModule, Link } from "gatsby"
-// import renderer from "../components/renderer"
 import Layout from "../components/layout"
 
 const componentRenderer = node => {
@@ -20,10 +19,9 @@ const options = {
   renderNode: {
     [BLOCKS.EMBEDDED_ENTRY]: componentRenderer,
     [INLINES.EMBEDDED_ENTRY]: componentRenderer,
-    [INLINES.ENTRY_HYPERLINK]: (node, children) =>
-      console.log(node) || (
-        <Link to={`/${node.data.target.fields.slug ?? ``}`}>{children}</Link>
-      ),
+    [INLINES.ENTRY_HYPERLINK]: (node, children) => (
+      <Link to={`/${node.data.target.fields.slug ?? ``}`}>{children}</Link>
+    ),
   },
 }
 

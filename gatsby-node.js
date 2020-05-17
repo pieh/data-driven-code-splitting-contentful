@@ -131,7 +131,7 @@ exports.createResolvers = ({ createResolvers }) => {
           type: `String!`,
           resolve(_, _2, context) {
             return context.addModuleDependency({
-              source: componentPath,
+              source: require.resolve(componentPath),
             })
           },
         },
